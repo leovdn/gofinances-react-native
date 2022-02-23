@@ -1,7 +1,10 @@
 import React from "react";
 import { getBottomSpace } from "react-native-iphone-x-helper";
 import { HighlightCard } from "../../components/HighlightCard";
-import { TransactionCard } from "../../components/TransactionCard";
+import {
+  TransactionCard,
+  TransactionCardProps,
+} from "../../components/TransactionCard";
 
 import {
   Container,
@@ -19,9 +22,15 @@ import {
   TransactionList,
 } from "./styles";
 
+export interface DataListProps extends TransactionCardProps {
+  id: string;
+}
+
 export function Dashboard() {
-  const data = [
+  const data: DataListProps[] = [
     {
+      id: "1",
+      type: "positive",
       title: "Desenvolvimento de site",
       amount: "R$12.000,00",
       category: {
@@ -31,6 +40,8 @@ export function Dashboard() {
       date: "12/11/2021",
     },
     {
+      id: "2",
+      type: "positive",
       title: "Desenvolvimento de App",
       amount: "R$21.043,60",
       category: {
@@ -40,22 +51,26 @@ export function Dashboard() {
       date: "22/07/2021",
     },
     {
-      title: "Desenvolvimento de App",
-      amount: "R$21.043,60",
+      id: "3",
+      type: "negative",
+      title: "Conta de luz",
+      amount: "R$343,42",
       category: {
-        name: "Vendas",
-        icon: "dollar-sign",
+        name: "Despesas",
+        icon: "shopping-bag",
       },
-      date: "22/07/2021",
+      date: "21/07/2021",
     },
     {
-      title: "Desenvolvimento de App",
-      amount: "R$21.043,60",
+      id: "4",
+      type: "negative",
+      title: "Contador",
+      amount: "R$253,32",
       category: {
-        name: "Vendas",
-        icon: "dollar-sign",
+        name: "Despesas",
+        icon: "shopping-bag",
       },
-      date: "22/07/2021",
+      date: "05/07/2021",
     },
   ];
 
@@ -108,11 +123,8 @@ export function Dashboard() {
 
         <TransactionList
           data={data}
+          keyExtractor={(item) => item.id}
           renderItem={({ item }) => <TransactionCard data={item} />}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{
-            paddingBottom: getBottomSpace(),
-          }}
         ></TransactionList>
       </Transactions>
     </Container>

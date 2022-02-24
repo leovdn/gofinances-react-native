@@ -11,6 +11,7 @@ import {
 
 // import { Dashboard } from "./src/screens/Dashboard";
 import theme from "./src/global/styles/theme";
+import { CategorySelect } from "./src/screens/CategorySelect";
 import { Register } from "./src/screens/Register";
 
 export default function App() {
@@ -28,6 +29,7 @@ export default function App() {
     <ThemeProvider theme={theme}>
       {/* <Dashboard /> */}
       <Register />
+      {/* <CategorySelect /> */}
     </ThemeProvider>
   );
 }

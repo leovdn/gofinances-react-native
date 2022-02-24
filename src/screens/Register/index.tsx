@@ -1,8 +1,9 @@
 import React, { useState } from "react";
+import { useForm } from "react-hook-form";
 import { Modal } from "react-native";
 import { Button } from "../../components/Forms/Button";
 import { CategorySelecButton } from "../../components/Forms/CategorySelectButton";
-import { Input } from "../../components/Forms/Input";
+import { InputForm } from "../../components/Forms/InputForm";
 import { TransactionTypeButton } from "../../components/Forms/TransactionTypeButton";
 import { CategorySelect } from "../CategorySelect";
 import {
@@ -14,6 +15,11 @@ import {
   TansactionTypes,
 } from "./styles";
 
+interface FormData {
+  name: string;
+  amount: string;
+}
+
 export function Register() {
   const [transactionType, setTransactionType] = useState("");
   const [categoryModalOpen, setCategoryModalOpen] = useState(false);
@@ -22,6 +28,8 @@ export function Register() {
     key: "category",
     name: "Categoria",
   });
+
+  const { control, handleSubmit } = useForm();
 
   function handleTransactionTypeSelect(type: "up" | "down") {
     setTransactionType(type);
@@ -35,6 +43,17 @@ export function Register() {
     setCategoryModalOpen(true);
   }
 
+  function handleRegister(form: FormData) {
+    const data = {
+      name: form.name,
+      amount: form.amount,
+      transactionType,
+      category: category.key,
+    };
+
+    console.log(data);
+  }
+
   return (
     <Container>
       <Header>
@@ -43,8 +62,9 @@ export function Register() {
 
       <Form>
         <Fields>
-          <Input placeholder="Nome" />
-          <Input placeholder="Preço" />
+          <InputForm control={control} name="name" placeholder="Nome" />
+
+          <InputForm control={control} name="amount" placeholder="Preço" />
 
           <TansactionTypes>
             <TransactionTypeButton
@@ -67,7 +87,7 @@ export function Register() {
             title={category.name}
           />
         </Fields>
-        <Button title="Enviar" />
+        <Button title="Enviar" onPress={handleSubmit(handleRegister)} />
       </Form>
 
       <Modal visible={categoryModalOpen}>

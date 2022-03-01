@@ -27,53 +27,6 @@ export interface DataListProps extends TransactionCardProps {
 }
 
 export function Dashboard() {
-  const data: DataListProps[] = [
-    {
-      id: "1",
-      type: "positive",
-      title: "Desenvolvimento de site",
-      amount: "R$12.000,00",
-      category: {
-        name: "Vendas",
-        icon: "dollar-sign",
-      },
-      date: "12/11/2021",
-    },
-    {
-      id: "2",
-      type: "positive",
-      title: "Desenvolvimento de App",
-      amount: "R$21.043,60",
-      category: {
-        name: "Vendas",
-        icon: "dollar-sign",
-      },
-      date: "22/07/2021",
-    },
-    {
-      id: "3",
-      type: "negative",
-      title: "Conta de luz",
-      amount: "R$343,42",
-      category: {
-        name: "Despesas",
-        icon: "shopping-bag",
-      },
-      date: "21/07/2021",
-    },
-    {
-      id: "4",
-      type: "negative",
-      title: "Contador",
-      amount: "R$253,32",
-      category: {
-        name: "Despesas",
-        icon: "shopping-bag",
-      },
-      date: "05/07/2021",
-    },
-  ];
-
   return (
     <Container>
       <Header>

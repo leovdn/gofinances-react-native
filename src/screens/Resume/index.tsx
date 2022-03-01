@@ -2,8 +2,12 @@ import React, { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { VictoryPie } from "victory-native";
 import { RFValue } from "react-native-responsive-fontsize";
+import { format, addMonths, subMonths } from "date-fns";
+import { ptBR } from "date-fns/locale";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 
+import { categories } from "../../utils/categories";
+import theme from "../../global/styles/theme";
 import { HistoryCard } from "../../components/HistoryCard";
 import {
   Container,
@@ -16,9 +20,6 @@ import {
   MonthSelectIcon,
   Month,
 } from "./styles";
-import { categories } from "../../utils/categories";
-import theme from "../../global/styles/theme";
-
 interface TransactionData {
   type: "positive" | "negative";
   name: string;
@@ -26,7 +27,6 @@ interface TransactionData {
   category: string;
   date: string;
 }
-
 interface CategoryData {
   key: string;
   name: string;
@@ -37,9 +37,18 @@ interface CategoryData {
 }
 
 export function Resume() {
+  const [selectedDate, setSelectedDate] = useState(new Date());
   const [totalByCategories, setTotalByCategories] = useState<CategoryData[]>(
     []
   );
+
+  function handleDateChange(action: "next" | "prev") {
+    if (action === "next") {
+      setSelectedDate(addMonths(selectedDate, 1));
+    } else {
+      setSelectedDate(subMonths(selectedDate, 1));
+    }
+  }
 
   async function loadData() {
     const dataKey = "@gofinance:transactions";
@@ -47,7 +56,10 @@ export function Resume() {
     const responseFormatted = response ? JSON.parse(response) : [];
 
     const expenses = responseFormatted.filter(
-      (expense: TransactionData) => expense.type === "negative"
+      (expense: TransactionData) =>
+        expense.type === "negative" &&
+        new Date(expense.date).getMonth() === selectedDate.getMonth() &&
+        new Date(expense.date).getFullYear() === selectedDate.getFullYear()
     );
 
     const expensesTotal = expenses.reduce(
@@ -94,7 +106,7 @@ export function Resume() {
 
   useEffect(() => {
     loadData();
-  }, []);
+  }, [selectedDate]);
 
   return (
     <Container>
@@ -110,13 +122,13 @@ export function Resume() {
         }}
       >
         <MonthSelect>
-          <MonthSelectButton>
+          <MonthSelectButton onPress={() => handleDateChange("prev")}>
             <MonthSelectIcon name="chevron-left" />
           </MonthSelectButton>
 
-          <Month>Abril</Month>
+          <Month>{format(selectedDate, "MMMM, yyyy", { locale: ptBR })}</Month>
 
-          <MonthSelectButton>
+          <MonthSelectButton onPress={() => handleDateChange("next")}>
             <MonthSelectIcon name="chevron-right" />
           </MonthSelectButton>
         </MonthSelect>

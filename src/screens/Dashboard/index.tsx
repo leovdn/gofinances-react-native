@@ -1,4 +1,5 @@
-import React from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import React, { useEffect, useState } from "react";
 import { getBottomSpace } from "react-native-iphone-x-helper";
 import { HighlightCard } from "../../components/HighlightCard";
 import {
@@ -27,6 +28,48 @@ export interface DataListProps extends TransactionCardProps {
 }
 
 export function Dashboard() {
+  const [transactions, setTransactions] = useState<DataListProps[]>([]);
+
+  async function loadTransaction() {
+    const dataKey = "@gofinance:transactions";
+    const response = await AsyncStorage.getItem(dataKey);
+    console.log("ha", response);
+
+    const transactions = response ? JSON.parse(response) : [];
+
+    const transactionsFormatted: DataListProps[] = transactions.map(
+      (item: DataListProps) => {
+        const amount = Number(item.amount).toLocaleString("pt-BR", {
+          style: "currency",
+          currency: "BRL",
+        });
+
+        const date = Intl.DateTimeFormat("pt-BR", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "2-digit",
+        }).format(new Date(item.date));
+
+        console.log("data teste", date);
+
+        return {
+          id: item.id,
+          name: item.name,
+          amount: amount,
+          type: item.type,
+          category: item.category,
+          date: date,
+        };
+      }
+    );
+
+    setTransactions(transactionsFormatted);
+  }
+
+  useEffect(() => {
+    loadTransaction();
+  }, []);
+
   return (
     <Container>
       <Header>
@@ -75,7 +118,7 @@ export function Dashboard() {
         <Title>Listagem</Title>
 
         <TransactionList
-          data={data}
+          data={transactions}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => <TransactionCard data={item} />}
         ></TransactionList>

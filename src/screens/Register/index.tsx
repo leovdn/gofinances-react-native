@@ -43,7 +43,6 @@ export function Register() {
   });
 
   const navigation = useNavigation();
-  const dataKey = "@gofinance:transactions";
 
   const {
     control,
@@ -72,13 +71,15 @@ export function Register() {
     if (category.key === "category")
       return Alert.alert("Selecione a categoria");
 
+    const dataKey = "@gofinance:transactions";
+
     const newTransaction = {
       id: String(uuid.v4()),
       name: form.name,
       amount: form.amount,
       transactionType,
       category: category.key,
-      date: new Date(),
+      date: String(new Date()),
     };
 
     try {

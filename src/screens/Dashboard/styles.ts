@@ -97,3 +97,9 @@ export const TransactionList = styled(FlatList).attrs({
     paddingBottom: getBottomSpace() + 10,
   },
 })`` as React.ComponentType as new <DataListProps>() => FlatList<DataListProps>;
+
+export const LoadContainer = styled.View`
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+`;

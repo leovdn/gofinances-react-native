@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { VictoryPie } from "victory-native";
 import { RFValue } from "react-native-responsive-fontsize";
@@ -22,6 +22,7 @@ import {
   LoadContainer,
 } from "./styles";
 import { ActivityIndicator } from "react-native";
+import { useFocusEffect } from "@react-navigation/native";
 interface TransactionData {
   type: "positive" | "negative";
   name: string;
@@ -113,6 +114,12 @@ export function Resume() {
   useEffect(() => {
     loadData();
   }, [selectedDate]);
+
+  useFocusEffect(
+    useCallback(() => {
+      loadData();
+    }, [])
+  );
 
   return (
     <Container>

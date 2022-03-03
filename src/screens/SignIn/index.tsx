@@ -22,22 +22,29 @@ import { useAuth } from "../../hooks/auth";
 
 export function SignIn() {
   const { signInWithGoogle, signInWithApple } = useAuth();
+  const [isLoading, setIsLoading] = useState(false);
 
   async function handleSignInWithGoogle() {
     try {
-      await signInWithGoogle();
+      setIsLoading(true);
+      return await signInWithGoogle();
     } catch (error) {
       console.log(error);
       Alert.alert("Não foi possível conectar à conta Google");
+    } finally {
+      setIsLoading(false);
     }
   }
 
   async function handleSignInWithApple() {
     try {
-      await signInWithApple();
+      setIsLoading(true);
+      return await signInWithApple();
     } catch (error) {
       console.log(error);
       Alert.alert("Não foi possível conectar à conta Apple");
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -73,6 +80,13 @@ export function SignIn() {
             onPress={handleSignInWithApple}
           />
         </FooterWrapper>
+
+        {isLoading && (
+          <ActivityIndicator
+            style={{ marginTop: 18 }}
+            color={theme.colors.shape}
+          />
+        )}
       </Footer>
     </Container>
   );

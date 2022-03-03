@@ -21,6 +21,7 @@ import {
   TansactionTypes,
 } from "./styles";
 import { useNavigation } from "@react-navigation/native";
+import { useAuth } from "../../hooks/auth";
 
 interface FormData {
   [name: string]: any;
@@ -36,6 +37,8 @@ const schema = Yup.object().shape({
 export function Register() {
   const [transactionType, setTransactionType] = useState("");
   const [categoryModalOpen, setCategoryModalOpen] = useState(false);
+
+  const { user } = useAuth();
 
   const [category, setCategory] = useState({
     key: "category",
@@ -71,7 +74,7 @@ export function Register() {
     if (category.key === "category")
       return Alert.alert("Selecione a categoria");
 
-    const dataKey = "@gofinance:transactions";
+    const dataKey = `@gofinance:transactions_user:${user.id}`;
 
     const newTransaction = {
       id: String(uuid.v4()),
